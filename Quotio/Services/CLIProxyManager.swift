@@ -81,6 +81,16 @@ final class CLIProxyManager {
         }
     }
     
+    func updateConfigLogging(enabled: Bool) {
+        guard FileManager.default.fileExists(atPath: configPath),
+              var content = try? String(contentsOfFile: configPath, encoding: .utf8) else { return }
+        
+        if let range = content.range(of: #"logging-to-file:\s*(true|false)"#, options: .regularExpression) {
+            content.replaceSubrange(range, with: "logging-to-file: \(enabled)")
+            try? content.write(toFile: configPath, atomically: true, encoding: .utf8)
+        }
+    }
+    
     private func ensureConfigExists() {
         guard !FileManager.default.fileExists(atPath: configPath) else { return }
         

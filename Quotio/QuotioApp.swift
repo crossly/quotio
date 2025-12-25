@@ -60,6 +60,7 @@ struct MenuBarLabel: View {
 
 struct ContentView: View {
     @Environment(QuotaViewModel.self) private var viewModel
+    @AppStorage("loggingToFile") private var loggingToFile = true
     
     var body: some View {
         @Bindable var vm = viewModel
@@ -83,8 +84,10 @@ struct ContentView: View {
                     Label("nav.apiKeys".localized(), systemImage: "key.horizontal")
                         .tag(NavigationPage.apiKeys)
                     
-                    Label("nav.logs".localized(), systemImage: "doc.text")
-                        .tag(NavigationPage.logs)
+                    if loggingToFile {
+                        Label("nav.logs".localized(), systemImage: "doc.text")
+                            .tag(NavigationPage.logs)
+                    }
                     
                     Label("nav.settings".localized(), systemImage: "gearshape")
                         .tag(NavigationPage.settings)

@@ -16,6 +16,7 @@ struct SettingsScreen: View {
     @AppStorage("requestRetry") private var requestRetry = 3
     @AppStorage("switchProjectOnQuotaExceeded") private var switchProject = true
     @AppStorage("switchPreviewModelOnQuotaExceeded") private var switchPreviewModel = true
+    @AppStorage("loggingToFile") private var loggingToFile = true
     
     @State private var portText: String = ""
     
@@ -143,6 +144,18 @@ struct SettingsScreen: View {
                 Label("settings.retryConfiguration".localized(), systemImage: "arrow.clockwise")
             } footer: {
                 Text("settings.retryHelp".localized())
+            }
+            
+            // Logging
+            Section {
+                Toggle("settings.loggingToFile".localized(), isOn: $loggingToFile)
+                    .onChange(of: loggingToFile) { _, newValue in
+                        viewModel.proxyManager.updateConfigLogging(enabled: newValue)
+                    }
+            } header: {
+                Label("settings.logging".localized(), systemImage: "doc.text")
+            } footer: {
+                Text("settings.loggingHelp".localized())
             }
             
             // Notifications
